@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>🌴 Bangkok 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+<style>
+:root {
+  --p50:  #f0fdf4;
+  --p100: #dcfce7;
+  --p200: #bbf7d0;
+  --p400: #4ade80;
+  --p600: #16a34a;
+  --p700: #15803d;
+  --p800: #0d6e37;
+  --p900: #14532d;
+  --p950: #052e16;
+  --bg:     #f4f7f4;
+  --card:   #ffffff;
+  --text:   #111827;
+  --muted:  #6b7280;
+  --border: #e5e7eb;
+  --radius: 14px;
+  --shadow: 0 1px 12px rgba(0,0,0,0.07);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{background:var(--bg);font-family:'Noto Sans TC',sans-serif;color:var(--text);overflow-x:hidden;}
+
+/* Hero */
+.hero{background:linear-gradient(150deg,var(--p950) 0%,var(--p800) 55%,var(--p600) 100%);padding:52px 20px 72px;text-align:center;position:relative;overflow:hidden;}
+.hero::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:32px;background:var(--bg);border-radius:32px 32px 0 0;}
+.hero-icon{font-size:52px;display:block;margin-bottom:10px;}
+.hero h1{font-family:'Playfair Display',serif;font-size:26px;color:#fff;letter-spacing:.5px;margin-bottom:4px;}
+.hero-sub{color:rgba(255,255,255,.72);font-size:13px;}
+.hero-pill{display:inline-flex;align-items:center;gap:6px;margin-top:14px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.28);color:#fff;font-size:12px;padding:5px 14px;border-radius:20px;}
+.hero-pill .material-icons-round{font-size:14px;}
+
+/* Tab Bar */
+.tab-bar{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--border);display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -2px 16px rgba(0,0,0,.06);}
+.tab-btn{flex:1;display:flex;flex-direction:column;align-items:center;padding:9px 2px 7px;border:none;background:none;cursor:pointer;color:var(--muted);font-size:10px;gap:2px;font-family:inherit;transition:color .2s;}
+.tab-btn .material-icons-round{font-size:22px;}
+.tab-btn.active{color:var(--p800);}
+
+/* Pages */
+.pages{padding-bottom:80px;}
+.page{display:none;}
+.page.active{display:block;}
+.slabel{font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;padding:18px 16px 8px;}
+
+/* ── 天氣+航班 ── */
+.wx-card{margin:-20px 16px 12px;background:linear-gradient(135deg,var(--p800),var(--p600));border-radius:var(--radius);box-shadow:0 4px 24px rgba(13,110,55,.28);color:#fff;padding:20px;position:relative;overflow:hidden;}
+.wx-card::before{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;background:rgba(255,255,255,.07);border-radius:50%;}
+.wx-top{display:flex;justify-content:space-between;align-items:flex-start;}
+.wx-city{font-size:17px;font-weight:700;}
+.wx-desc{font-size:12px;opacity:.75;margin-top:3px;}
+.wx-temp{font-size:54px;font-weight:700;line-height:1;margin-top:6px;}
+.wx-emoji{font-size:52px;line-height:1;}
+.wx-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:16px;}
+.wx-stat{background:rgba(255,255,255,.14);border-radius:10px;padding:8px;text-align:center;}
+.wx-sv{font-size:15px;font-weight:700;}
+.wx-sk{font-size:10px;opacity:.75;margin-top:2px;}
+.info-box{margin:0 16px 12px;background:var(--p50);border-left:3px solid var(--p600);border-radius:0 10px 10px 0;padding:10px 14px;font-size:13px;color:var(--p900);}
+
+/* 航班 */
+.flight-strip{margin:0 16px 12px;background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;}
+.fs-head{display:flex;align-items:center;gap:8px;padding:10px 14px;font-size:12px;font-weight:700;color:#fff;}
+.fs-head.go{background:var(--p800);}
+.fs-head.back{background:var(--p950);}
+.fs-head .material-icons-round{font-size:16px;}
+.fs-body{display:flex;align-items:center;padding:16px 14px;gap:8px;}
+.fs-airport{text-align:center;flex-shrink:0;}
+.fs-code{font-size:24px;font-weight:700;color:var(--p800);}
+.fs-name{font-size:10px;color:var(--muted);margin-top:2px;}
+.fs-time{font-size:15px;font-weight:700;margin-top:4px;}
+.fs-mid{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;}
+.fs-line{width:100%;height:1px;background:var(--border);}
+.fs-plane-icon{font-size:18px;color:var(--p600);}
+.fs-dur{font-size:10px;color:var(--muted);}
+.fs-meta{display:flex;border-top:1px solid var(--border);}
+.fs-cell{flex:1;padding:8px 14px;}
+.fs-cell:not(:last-child){border-right:1px solid var(--border);}
+.fs-cl{font-size:10px;color:var(--muted);margin-bottom:2px;}
+.fs-cv{font-size:13px;font-weight:600;}
+
+/* 飯店卡 */
+.hotel-card{margin:0 16px 12px;background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;}
+.hotel-head{background:var(--p900);color:#fff;padding:10px 14px;font-size:12px;font-weight:700;display:flex;align-items:center;gap:8px;}
+.hotel-head .material-icons-round{font-size:16px;}
+.hotel-body{padding:14px;}
+.hotel-name-th{font-size:13px;color:var(--muted);margin-bottom:4px;}
+.hotel-name{font-size:15px;font-weight:700;margin-bottom:12px;}
+.hotel-map-btn{display:flex;align-items:center;gap:6px;background:var(--p50);border:1.5px solid var(--p200);color:var(--p800);font-size:13px;font-weight:600;padding:9px 14px;border-radius:10px;text-decoration:none;width:100%;justify-content:center;}
+.hotel-map-btn .material-icons-round{font-size:18px;color:var(--p600);}
+
+/* ── 行程 ── */
+.day-wrap{margin:0 16px 14px;}
+.day-head{background:linear-gradient(90deg,var(--p800),var(--p600));color:#fff;padding:11px 16px;border-radius:var(--radius) var(--radius) 0 0;display:flex;justify-content:space-between;align-items:center;}
+.day-head h3{font-size:14px;font-weight:700;}
+.day-head .material-icons-round{font-size:20px;opacity:.85;}
+.day-body{background:var(--card);border-radius:0 0 var(--radius) var(--radius);box-shadow:var(--shadow);}
+.act{padding:11px 14px;display:flex;gap:10px;border-top:1px solid var(--border);align-items:flex-start;}
+.act:first-child{border-top:none;}
+.act-time{font-size:11px;color:var(--muted);min-width:50px;padding-top:1px;font-weight:500;flex-shrink:0;}
+.act-dot{width:8px;height:8px;border-radius:50%;background:var(--p600);margin-top:4px;flex-shrink:0;}
+.act-name{font-size:13px;font-weight:500;line-height:1.4;}
+.act-note{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.4;}
+.act-link{display:inline-flex;align-items:center;gap:3px;margin-top:4px;font-size:11px;color:var(--p700);text-decoration:none;background:var(--p50);padding:3px 8px;border-radius:6px;}
+.act-link .material-icons-round{font-size:12px;}
+.day-tip{background:var(--p50);padding:9px 14px;font-size:12px;color:var(--p900);border-top:1px solid var(--p100);display:flex;gap:6px;align-items:flex-start;}
+.day-tip .material-icons-round{font-size:15px;color:var(--p600);flex-shrink:0;margin-top:1px;}
+.opt-list{padding:10px 14px;border-top:1px solid var(--border);}
+.opt-label{font-size:11px;font-weight:700;color:var(--muted);margin-bottom:6px;display:flex;align-items:center;gap:4px;}
+.opt-label .material-icons-round{font-size:13px;}
+.opt-chip{display:inline-block;background:var(--p50);border:1px solid var(--p200);color:var(--p800);font-size:11px;padding:3px 9px;border-radius:8px;margin:2px 3px 2px 0;}
+
+/* ── 清單 ── */
+.cl-group{margin:0 16px 12px;background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;}
+.cl-head{padding:11px 14px;font-size:14px;font-weight:700;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;}
+.cl-head .material-icons-round{font-size:18px;color:var(--p600);}
+.cl-row{display:flex;align-items:center;gap:12px;padding:11px 14px;border-top:1px solid var(--border);cursor:pointer;}
+.cl-row:first-of-type{border-top:none;}
+.cl-row:active{background:var(--p50);}
+.chkbox{width:20px;height:20px;border-radius:6px;border:2px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.chkbox.on{background:var(--p700);border-color:var(--p700);}
+.chkbox.on .material-icons-round{font-size:14px;color:#fff;}
+.cl-text{font-size:13px;flex:1;}
+.cl-text.on{color:var(--muted);text-decoration:line-through;}
+.prog-bar{height:5px;background:var(--border);margin:4px 16px 2px;border-radius:3px;}
+.prog-fill{height:100%;background:var(--p600);border-radius:3px;transition:width .3s;}
+.prog-txt{font-size:11px;color:var(--muted);text-align:right;padding:0 16px 12px;}
+
+/* ── 聊天室（文達 + AI 合一）── */
+.chat-header{background:var(--p800);color:#fff;padding:14px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:10;}
+.chat-header .material-icons-round{font-size:20px;}
+.chat-header-name{font-size:15px;font-weight:700;}
+.chat-header-sub{font-size:11px;opacity:.75;}
+.chat-outer{display:flex;flex-direction:column;height:calc(100vh - 140px);}
+.chat-msgs{flex:1;overflow-y:auto;padding:14px 12px;display:flex;flex-direction:column;gap:10px;background:#c8dfc8;background-image:url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23a8cca8' fill-opacity='0.25' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E");}
+.day-divider{text-align:center;margin:4px 0 8px;}
+.day-divider span{background:rgba(0,0,0,.18);color:#fff;font-size:11px;padding:3px 12px;border-radius:12px;}
+
+/* bot 訊息 */
+.msg-row{display:flex;gap:8px;align-items:flex-end;margin-bottom:2px;}
+.msg-avatar{width:32px;height:32px;border-radius:50%;background:var(--p700);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.msg-wrap{max-width:80%;}
+.msg-sender{font-size:11px;color:#555;margin-bottom:3px;padding-left:2px;}
+.msg-bubble{background:#fff;border-radius:0 14px 14px 14px;padding:10px 13px;font-size:13px;line-height:1.65;box-shadow:0 1px 4px rgba(0,0,0,.1);white-space:pre-wrap;word-break:break-word;}
+.msg-bubble.user-bubble{background:var(--p700);color:#fff;border-radius:14px 0 14px 14px;align-self:flex-end;}
+.msg-row.user-row{flex-direction:row-reverse;}
+.msg-meta{display:flex;align-items:center;gap:6px;margin-top:4px;}
+.msg-time{font-size:10px;color:#777;}
+.copy-chip{font-size:10px;background:rgba(0,0,0,.12);color:#333;padding:2px 8px;border-radius:10px;border:none;cursor:pointer;display:flex;align-items:center;gap:3px;font-family:inherit;transition:background .2s;}
+.copy-chip .material-icons-round{font-size:11px;}
+.copy-chip.copied{background:var(--p700);color:#fff;}
+
+/* 快速問題 chips */
+.quick-row{display:flex;gap:8px;overflow-x:auto;padding:8px 12px;background:#c8dfc8;scrollbar-width:none;}
+.quick-row::-webkit-scrollbar{display:none;}
+.q-chip{flex-shrink:0;padding:6px 12px;border-radius:16px;border:1.5px solid rgba(255,255,255,.7);background:rgba(255,255,255,.85);font-size:12px;cursor:pointer;white-space:nowrap;font-family:inherit;color:var(--p900);display:flex;align-items:center;gap:4px;}
+.q-chip .material-icons-round{font-size:13px;color:var(--p600);}
+.q-chip:active{background:#fff;}
+
+/* 輸入框 */
+.chat-input-area{padding:10px 12px;background:#f0f0f0;display:flex;gap:8px;align-items:flex-end;border-top:1px solid #ddd;}
+.chat-input{flex:1;border:none;border-radius:20px;padding:10px 14px;font-size:13px;font-family:inherit;resize:none;outline:none;max-height:80px;background:#fff;line-height:1.4;box-shadow:0 1px 4px rgba(0,0,0,.1);}
+.send-btn{width:40px;height:40px;border-radius:50%;background:var(--p700);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.send-btn .material-icons-round{font-size:20px;color:#fff;}
+.send-btn:active{background:var(--p900);}
+.typing-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--muted);margin:0 2px;animation:bounce .9s infinite;}
+.typing-dot:nth-child(2){animation-delay:.2s;}
+.typing-dot:nth-child(3){animation-delay:.4s;}
+@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<div class="hero">
+  <span class="hero-icon">🌴</span>
+  <h1>Bangkok 2026</h1>
+  <div class="hero-sub">家族旅遊 · 四天三夜</div>
+  <div class="hero-pill">
+    <span class="material-icons-round">flight</span>
+    4/30（四）出發 — 5/3（一）返台
+  </div>
+</div>
+
+<div class="pages">
+
+  <!-- ══ 頁1：天氣 + 航班 ══ -->
+  <div class="page active" id="page-wx">
+    <div class="slabel">曼谷即時天氣</div>
+
+    <div class="wx-card">
+      <div class="wx-top">
+        <div>
+          <div class="wx-city">曼谷 Bangkok</div>
+          <div class="wx-desc">晴天，部分多雲</div>
+          <div class="wx-temp">34°</div>
+        </div>
+        <div class="wx-emoji">☀️</div>
+      </div>
+      <div class="wx-stats">
+        <div class="wx-stat"><div class="wx-sv">78%</div><div class="wx-sk">濕度</div></div>
+        <div class="wx-stat"><div class="wx-sv">20%</div><div class="wx-sk">降雨機率</div></div>
+        <div class="wx-stat"><div class="wx-sv">UV 9</div><div class="wx-sk">紫外線</div></div>
+      </div>
+    </div>
+
+    <div class="info-box">☀️ <strong>每日必備：</strong>防曬 SPF50+、折疊雨傘（午後雷陣雨）、薄長袖（室內冷氣超強）、多喝水</div>
+
+    <div class="slabel">航班資訊</div>
+
+    <div class="flight-strip">
+      <div class="fs-head go">
+        <span class="material-icons-round">flight_takeoff</span>去程　4/30（四）
+      </div>
+      <div class="fs-body">
+        <div class="fs-airport">
+          <div class="fs-code">TPE</div>
+          <div class="fs-name">桃園國際</div>
+          <div class="fs-time">09:25</div>
+        </div>
+        <div class="fs-mid">
+          <span class="material-icons-round fs-plane-icon">flight</span>
+          <div class="fs-line"></div>
+          <div class="fs-dur">3h 45m</div>
+        </div>
+        <div class="fs-airport" style="text-align:right">
+          <div class="fs-code">BKK</div>
+          <div class="fs-name">素萬那普</div>
+          <div class="fs-time">12:10</div>
+        </div>
+      </div>
+      <div class="fs-meta">
+        <div class="fs-cell"><div class="fs-cl">航空公司</div><div class="fs-cv">華航 CI</div></div>
+        <div class="fs-cell"><div class="fs-cl">航廈</div><div class="fs-cv">T1 桃園</div></div>
+        <div class="fs-cell"><div class="fs-cl">飛行時間</div><div class="fs-cv">3h 45m</div></div>
+      </div>
+    </div>
+
+    <div class="flight-strip">
+      <div class="fs-head back">
+        <span class="material-icons-round">flight_land</span>回程　5/3（一）
+      </div>
+      <div class="fs-body">
+        <div class="fs-airport">
+          <div class="fs-code">BKK</div>
+          <div class="fs-name">素萬那普</div>
+          <div class="fs-time">10:50</div>
+        </div>
+        <div class="fs-mid">
+          <span class="material-icons-round fs-plane-icon" style="transform:scaleX(-1)">flight</span>
+          <div class="fs-line"></div>
+          <div class="fs-dur">3h 40m</div>
+        </div>
+        <div class="fs-airport" style="text-align:right">
+          <div class="fs-code">TPE</div>
+          <div class="fs-name">桃園國際</div>
+          <div class="fs-time">15:30</div>
+        </div>
+      </div>
+      <div class="fs-meta">
+        <div class="fs-cell"><div class="fs-cl">航空公司</div><div class="fs-cv">華航 CI</div></div>
+        <div class="fs-cell"><div class="fs-cl">飛行時間</div><div class="fs-cv">3h 40m</div></div>
+        <div class="fs-cell"><div class="fs-cl">抵台</div><div class="fs-cv">15:30</div></div>
+      </div>
+    </div>
+
+    <div class="slabel">住宿</div>
+
+    <div class="hotel-card">
+      <div class="hotel-head">
+        <span class="material-icons-round">hotel</span>
+        全程住宿（4/30 — 5/3）
+      </div>
+      <div class="hotel-body">
+        <div class="hotel-name-th">โรงแรมอีสติน แกรนด์ สาทร</div>
+        <div class="hotel-name">易思廷大酒店沙吞<br>Eastin Grand Hotel Sathorn</div>
+        <a class="hotel-map-btn" href="https://maps.app.goo.gl/HXtadQA7puTtPDbu9" target="_blank">
+          <span class="material-icons-round">location_on</span>
+          在 Google Maps 查看位置
+        </a>
+      </div>
+    </div>
+
+    <div class="info-box" style="margin-bottom:16px">
+      <span class="material-icons-round" style="font-size:15px;vertical-align:middle;color:var(--p700)">info</span>
+      提前 <strong>2.5 小時</strong>抵達機場 · 台灣入境泰國 <strong>免簽</strong>，可停留 30 天
+    </div>
+  </div>
+
+  <!-- ══ 頁2：行程（Notion 同步版）══ -->
+  <div class="page" id="page-itin">
+    <div class="slabel">Notion 行程</div>
+
+    <!-- Day 1 -->
+    <div class="day-wrap">
+      <div class="day-head">
+        <h3>🛕 Day 1 · 4月30日　台灣 → 曼谷</h3>
+        <span class="material-icons-round">flight_land</span>
+      </div>
+      <div class="day-body">
+        <div class="act">
+          <div class="act-time">09:25–12:10</div><div class="act-dot"></div>
+          <div>
+            <div class="act-name">坐飛機（飛行時間 3 小時 45 分鐘）</div>
+            <div class="act-note">華航 CI · 桃園 → 曼谷素萬那普 BKK</div>
+          </div>
+        </div>
+        <div class="act">
+          <div class="act-time">12:10–13:50</div><div class="act-dot"></div>
+          <div>
+            <div class="act-name">搭 Taxi 或地鐵去飯店放行李</div>
+            <div class="act-note">或先去飯店附近吃飯</div>
+            <a class="act-link" href="https://www.google.com/maps/search/Baan+Somtum+Sathorn+Bangkok" target="_blank">
+              <span class="material-icons-round">restaurant</span>Baan Somtum Sathorn
+            </a>
+          </div>
+        </div>
+        <div class="act">
+          <div class="act-time">14:00</div><div class="act-dot"></div>
+          <div>
+            <div class="act-name">Check in — Eastin Grand Hotel Sathorn</div>
+            <div class="act-note">易思廷大酒店沙吞</div>
+            <a class="act-link" href="https://maps.app.goo.gl/HXtadQA7puTtPDbu9" target="_blank">
+              <span class="material-icons-round">location_on</span>飯店地圖
+            </a>
+          </div>
+        </div>
+        <div class="act">
+          <div class="act-time">15:00–22:00</div><div class="act-dot" style="background:var(--p400)"></div>
+          <div>
+            <div class="act-name">🎉 隨意玩，沒有行程</div>
+            <div class="act-note">自由探索沙吞區周邊</div>
+          </div>
+        </div>
+        <div class="day-tip"><span class="material-icons-round">push_pin</span>計程車請走官方排隊，上車確認跳錶；入境記得填 TM.6 表格</div>
+      </div>
+    </div>
+
+    <!-- Day 2 -->
+    <div class="day-wrap">
+      <div class="day-head">
+        <h3>🛕 Day 2 · 5月1日　曼谷</h3>
+        <span class="material-icons-round">directions_boat</span>
+      </div>
+      <div class="day-body">
+        <div class="act">
+          <div class="act-time">起床</div><div class="act-dot"></div>
+          <div><div class="act-name">起床吃早餐</div></div>
+        </div>
+        <div class="act">
+          <div class="act-time">07:30–16:00</div><div class="act-dot"></div>
+          <div>
+            <div class="act-name">湊團接駁一日遊</div>
+            <div class="act-note">水上市場 Floating Market & 美功鐵路 Mae Klong Railway Market</div>
+            <a class="act-link" href="https://www.klook.com/zh-TW/activity/10527-damnoen-saduak-maeklong-day-trip-bangkok/" target="_blank">
+              <span class="material-icons-round">open_in_new</span>Klook 丹嫩莎朵 & 美功鐵道市場
+            </a>
+          </div>
+        </div>
+        <div class="act">
+          <div class="act-time">16:00–23:00</div><div class="act-dot" style="background:var(--p400)"></div>
+          <div><div class="act-name">🎉 隨意玩，沒有行程</div></div>
+        </div>
+        <div class="day-tip"><span class="material-icons-round">schedule</span>一日遊請提前在 Klook 預訂，出發前確認集合時間地點</div>
+      </div>
+    </div>
+
+    <!-- Day 3 -->
+    <div class="day-wrap">
+      <div class="day-head">
+        <h3>🛕 Day 3 · 5月2日　曼谷</h3>
+        <span class="material-icons-round">shopping_bag</span>
+      </div>
+      <div class="day-body">
+        <div class="act">
+          <div class="act-time">08:00–10:00</div><div class="act-dot"></div>
+          <div><div class="act-name">睡到自然醒，起床吃早餐</div></div>
+        </div>
+        <div class="act">
+          <div class="act-time">隨意</div><div class="act-dot" style="background:var(--p400)"></div>
+          <div>
+            <div class="act-name">🎉 隨意玩，沒有行程</div>
+            <div class="act-note">可以去洽圖洽市集 Chatuchak Weekend Market</div>
+          </div>
+        </div>
+        <div class="opt-list">
+          <div class="opt-label"><span class="material-icons-round">pin_drop</span>今日推薦景點</div>
+          <a class="opt-chip" href="https://www.google.com/maps/search/JODD+FAIRS+Rama+9+Bangkok" target="_blank">喬德夜市 JODD FAIRS Rama 9</a>
+          <a class="opt-chip" href="https://www.google.com/maps/search/Pratunam+Market+Bangkok" target="_blank">水門市場 Pratunam Market</a>
+          <a class="opt-chip" href="https://www.google.com/maps/search/Chatuchak+Weekend+Market" target="_blank">洽圖洽市集 Chatuchak</a>
+          <a class="opt-chip" href="https://www.google.com/maps/search/Siam+Paragon+Bangkok" target="_blank">Siam 暹羅商圈</a>
+          <a class="opt-chip" href="https://www.google.com/maps/search/Central+Chit+Lom+Bangkok" target="_blank">Chit Lom 奇隆商圈</a>
+          <a class="opt-chip" href="https://www.google.com/maps/search/King+Power+Mahanakhon+Bangkok" target="_blank">King Power Mahanakhon</a>
+          <a class="opt-chip" href="https://www.google.com/maps/search/Wat+Arun+Bangkok" target="_blank">Wat Arun 鄭王廟</a>
+        </div>
+        <div class="day-tip"><span class="material-icons-round">directions_transit</span>BTS 1 日票約 150 泰銖，今天移動多強烈建議買</div>
+      </div>
+    </div>
+
+    <!-- Day 4 -->
+    <div class="day-wrap">
+      <div class="day-head">
+        <h3>🛕 Day 4 · 5月3日　曼谷 → 台灣</h3>
+        <span class="material-icons-round">flight_takeoff</span>
+      </div>
+      <div class="day-body">
+        <div class="act">
+          <div class="act-time">07:50</div><div class="act-dot"></div>
+          <div><div class="act-name">抵達機場</div><div class="act-note">素萬那普機場 BKK，提前 3 小時出門</div></div>
+        </div>
+        <div class="act">
+          <div class="act-time">10:50–15:30</div><div class="act-dot"></div>
+          <div>
+            <div class="act-name">坐飛機返台（飛行時間 3 小時 40 分鐘）</div>
+            <div class="act-note">華航 CI · 曼谷 BKK → 桃園 TPE，落地 15:30</div>
+          </div>
+        </div>
+        <div class="day-tip"><span class="material-icons-round">luggage</span>液體超過 100ml 放托運；隨身行李液體裝夾鏈袋備查</div>
+      </div>
+    </div>
+    <div style="height:16px"></div>
+  </div>
+
+  <!-- ══ 頁3：清單 ══ -->
+  <div class="page" id="page-pack">
+    <div class="slabel">行前準備清單</div>
+    <div class="prog-bar"><div class="prog-fill" id="prog" style="width:0%"></div></div>
+    <div class="prog-txt" id="prog-txt">0 / 0 完成</div>
+
+    <div class="cl-group">
+      <div class="cl-head"><span class="material-icons-round">badge</span>重要證件</div>
+      <div class="cl-row" onclick="chk(this)"><div class="chkbox"></div><div class="cl-text">護照（確認效期超過 6 個月）</div></div>
+      <div class="cl-row" onclick="chk(this)"><div class="chkbox"></div><div class="cl-text">機票電子票（截圖存手機）</div></div>
+      <div class="cl-row" onclick="chk(this)"><div class="chkbox"></div><div class="cl-text">飯店訂房確認信</div></div>
+      <div class="cl-row" onclick="chk(this)"><div class="chkbox"></div><div class="cl-text">旅遊平安保險文件</div></div>
+      <div class="cl-row" onclick="chk(this)"><div class="chkbox"></div><div class="cl-text">泰銖現金（建議 5,000–10,000 THB）</div></div>
+    </div>
+    <div class="cl-group">
+      <div class="cl-head"><span class="material-icons-round">wb_sunny</span>泰國氣候必備</div>
+      <div class="cl-row" onclick="chk(this)"><div class="chkbox"></div><div class="cl-text">防曬乳 SPF50+（每 2 小時補擦）</div></div>
+      <div class="cl-row" onclick="chk(this)"><div class="chkbox"></div><div class="cl-text">薄長袖（進廟宇 + 冷氣備用）</div></div>
+      <div class="cl-row" onclick="chk(this)"><div class="chkbox"></div><div class="cl-text">折疊雨傘</div></div>
+      <div class="cl-row" onclick="chk(this)"><div class="chkbox"></div><div class="cl-text">防蚊液</div></div>
+      <div class="cl-row" onclick="chk(this)"><div class="chkbox"></div><div class="cl-text">太陽眼鏡 + 帽子</div></div>
+    </div>
+    <div class="cl-group">
+      <div class="cl-head"><span class="material-icons-round">medication</span>健康藥品</div>
+      <div class="cl-row" onclick="chk(this)"><div class="chkbox"></div><div class="cl-text">腸胃藥 / 止瀉藥</div></div>
+      <div class="cl-row" onclick="chk(this)"><div class="chkbox"></div><div class="cl-text">退燒藥 / 感冒藥</div></div>
+      <div class="cl-row" onclick="chk(this)"><div class="chkbox"></div><div class="cl-text">萬金油 / 綠油精</div></div>
+    </div>
+    <div class="cl-group">
+      <div class="cl-head"><span class="material-icons-round">devices</span>3C 電子</div>
+      <div class="cl-row" onclick="chk(this)"><div class="chkbox"></div><div class="cl-text">萬用插頭轉接器（泰國 A/B 型）</div></div>
+      <div class="cl-row" onclick="chk(this)"><div class="chkbox"></div><div class="cl-text">行動電源</div></div>
+      <div class="cl-row" onclick="chk(this)"><div class="chkbox"></div><div class="cl-text">充電線 + 充電頭</div></div>
+    </div>
+    <div class="cl-group">
+      <div class="cl-head"><span class="material-icons-round">checkroom</span>衣物打包</div>
+      <div class="cl-row" onclick="chk(this)"><div class="chkbox"></div><div class="cl-text">輕薄透氣衣物</div></div>
+      <div class="cl-row" onclick="chk(this)"><div class="chkbox"></div><div class="cl-text">夾鏈袋（液體過安檢）</div></div>
+      <div class="cl-row" onclick="chk(this)"><div class="chkbox"></div><div class="cl-text">拖鞋（飯店室內用）</div></div>
+    </div>
+    <div style="height:16px"></div>
+  </div>
+
+  <!-- ══ 頁4：文達聊天室（Line 提醒 + AI 問答 合一）══ -->
+  <div class="page" id="page-chat">
+    <div class="chat-header">
+      <span class="material-icons-round">chat</span>
+      <div>
+        <div class="chat-header-name">文達聊天室</div>
+        <div class="chat-header-sub">旅遊小幫手 · 提醒 + 問答</div>
+      </div>
+    </div>
+
+    <div class="chat-outer">
+      <div class="chat-msgs" id="chat-msgs">
+
+        <!-- 預設提醒訊息 -->
+        <div class="day-divider"><span>出發前提醒訊息</span></div>
+
+        <div class="msg-row">
+          <div class="msg-avatar">🤖</div>
+          <div class="msg-wrap">
+            <div class="msg-sender">旅遊小幫手</div>
+            <div class="msg-bubble">📅 出發前 7 天提醒！
+
+本週準備：
+• 確認護照效期超過 6 個月
+• 截圖機票、飯店訂單備用
+• 換泰銖（建議 5,000–10,000 THB）
+• 下載 Google Maps 離線地圖
+• 安裝 Grab App（泰國版 Uber）
+
+✈️ 4/30 出發，倒數開始！🌴</div>
+            <div class="msg-meta">
+              <span class="msg-time">出發前 7 天</span>
+              <button class="copy-chip" onclick="copyMsg(this)"><span class="material-icons-round">content_copy</span>複製</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="msg-row">
+          <div class="msg-avatar">🤖</div>
+          <div class="msg-wrap">
+            <div class="msg-sender">旅遊小幫手</div>
+            <div class="msg-bubble">🧳 出發前 3 天！開始打包囉～
+
+必帶清單：
+✅ 護照（效期確認！）
+✅ 防曬乳 SPF50+
+✅ 薄長袖（廟宇 + 冷氣）
+✅ 折疊雨傘
+✅ 腸胃藥 / 止瀉藥
+✅ 防蚊液
+✅ 萬用插頭
+✅ 行動電源</div>
+            <div class="msg-meta">
+              <span class="msg-time">出發前 3 天</span>
+              <button class="copy-chip" onclick="copyMsg(this)"><span class="material-icons-round">content_copy</span>複製</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="msg-row">
+          <div class="msg-avatar">🤖</div>
+          <div class="msg-wrap">
+            <div class="msg-sender">旅遊小幫手</div>
+            <div class="msg-bubble">🛫 明天出發！最後確認：
+
+✅ 護照 + 機票截圖
+✅ 飯店確認信
+✅ 泰銖現金
+✅ 保險文件
+✅ 手機 + 行動電源充飽
+
+桃園機場 09:25 起飛
+記得 06:45 到機場！✈️🌴</div>
+            <div class="msg-meta">
+              <span class="msg-time">出發前 1 天</span>
+              <button class="copy-chip" onclick="copyMsg(this)"><span class="material-icons-round">content_copy</span>複製</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="msg-row">
+          <div class="msg-avatar">🤖</div>
+          <div class="msg-wrap">
+            <div class="msg-sender">旅遊小幫手</div>
+            <div class="msg-bubble">✈️ 今天出發！集合囉！
+
+📍 桃園機場 09:25 起飛
+🛬 曼谷 12:10 落地
+🏨 住：易思廷大酒店沙吞
+   Eastin Grand Hotel Sathorn
+
+記得護照 + 機票在手！
+泰國，我們來了！🎉🌴</div>
+            <div class="msg-meta">
+              <span class="msg-time">出發當天 4/30</span>
+              <button class="copy-chip" onclick="copyMsg(this)"><span class="material-icons-round">content_copy</span>複製</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="day-divider"><span>以下可直接問我任何問題 👇</span></div>
+
+        <div class="msg-row">
+          <div class="msg-avatar">🤖</div>
+          <div class="msg-wrap">
+            <div class="msg-sender">旅遊小幫手</div>
+            <div class="msg-bubble">哈囉！有任何曼谷旅遊問題都可以直接問我 🌴
+
+例如：
+• 怎麼從機場到飯店？
+• 水上市場要注意什麼？
+• 洽圖洽怎麼逛最有效率？
+• 推薦哪些必吃美食？</div>
+            <div class="msg-meta"><span class="msg-time">隨時</span></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 快速問題 -->
+      <div class="quick-row" id="quick-row">
+        <div class="q-chip" onclick="quickQ(this)"><span class="material-icons-round">flight_land</span>機場到飯店</div>
+        <div class="q-chip" onclick="quickQ(this)"><span class="material-icons-round">directions_boat</span>水上市場攻略</div>
+        <div class="q-chip" onclick="quickQ(this)"><span class="material-icons-round">restaurant</span>必吃美食</div>
+        <div class="q-chip" onclick="quickQ(this)"><span class="material-icons-round">currency_exchange</span>換泰銖</div>
+        <div class="q-chip" onclick="quickQ(this)"><span class="material-icons-round">shopping_bag</span>洽圖洽怎麼逛</div>
+        <div class="q-chip" onclick="quickQ(this)"><span class="material-icons-round">card_giftcard</span>推薦伴手禮</div>
+      </div>
+
+      <!-- 輸入框 -->
+      <div class="chat-input-area">
+        <textarea class="chat-input" id="chat-in" placeholder="輸入問題，或複製上方提醒訊息…" rows="1"
+          onkeydown="aiKey(event)" oninput="autoR(this)"></textarea>
+        <button class="send-btn" onclick="sendAI()"><span class="material-icons-round">send</span></button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /pages -->
+
+<!-- Tab Bar -->
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="sw('wx',this)">
+    <span class="material-icons-round">wb_sunny</span>天氣航班
+  </button>
+  <button class="tab-btn" onclick="sw('itin',this)">
+    <span class="material-icons-round">map</span>行程
+  </button>
+  <button class="tab-btn" onclick="sw('pack',this)">
+    <span class="material-icons-round">luggage</span>清單
+  </button>
+  <button class="tab-btn" onclick="sw('chat',this)">
+    <span class="material-icons-round">chat</span>文達
+  </button>
+</div>
+
+<script>
+// 分頁
+function sw(name,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// 清單
+function chk(row){
+  const box=row.querySelector('.chkbox'),txt=row.querySelector('.cl-text'),on=!box.classList.contains('on');
+  box.classList.toggle('on',on);txt.classList.toggle('on',on);
+  box.innerHTML=on?'<span class="material-icons-round">check</span>':'';
+  const all=document.querySelectorAll('.cl-row').length,done=document.querySelectorAll('.chkbox.on').length;
+  document.getElementById('prog').style.width=Math.round(done/all*100)+'%';
+  document.getElementById('prog-txt').textContent=done+' / '+all+' 完成';
+}
+
+// 複製提醒訊息
+function copyMsg(btn){
+  const txt=btn.closest('.msg-wrap').querySelector('.msg-bubble').textContent;
+  navigator.clipboard.writeText(txt).then(()=>{
+    const o=btn.innerHTML;btn.innerHTML='<span class="material-icons-round">check</span>已複製';btn.classList.add('copied');
+    setTimeout(()=>{btn.innerHTML=o;btn.classList.remove('copied');},2500);
+  });
+}
+
+// AI 聊天
+const hist=[];
+function autoR(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,80)+'px';}
+function aiKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendAI();}}
+function quickQ(chip){document.getElementById('chat-in').value=chip.textContent.trim();sendAI();}
+
+function addMsg(text,type){
+  const msgs=document.getElementById('chat-msgs');
+  if(type==='user'){
+    const row=document.createElement('div');row.className='msg-row user-row';
+    row.innerHTML=`<div class="msg-wrap"><div class="msg-bubble user-bubble">${text.replace(/\n/g,'<br>')}</div></div>`;
+    msgs.appendChild(row);msgs.scrollTop=msgs.scrollHeight;return null;
+  } else {
+    const row=document.createElement('div');row.className='msg-row';
+    row.innerHTML=`<div class="msg-avatar">🤖</div><div class="msg-wrap"><div class="msg-sender">旅遊小幫手</div><div class="msg-bubble" id="new-bubble"></div></div>`;
+    msgs.appendChild(row);msgs.scrollTop=msgs.scrollHeight;
+    return row.querySelector('#new-bubble');
+  }
+}
+
+function showTyping(){
+  const msgs=document.getElementById('chat-msgs');
+  const row=document.createElement('div');row.className='msg-row';row.id='typing-row';
+  row.innerHTML=`<div class="msg-avatar">🤖</div><div class="msg-wrap"><div class="msg-bubble"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></div></div>`;
+  msgs.appendChild(row);msgs.scrollTop=msgs.scrollHeight;
+}
+function hideTyping(){const t=document.getElementById('typing-row');if(t)t.remove();}
+
+async function sendAI(){
+  const inp=document.getElementById('chat-in');
+  const text=inp.value.trim();if(!text)return;
+  inp.value='';inp.style.height='auto';
+  addMsg(text,'user');
+  hist.push({role:'user',content:text});
+  showTyping();
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        system:`你是「文達旅遊小幫手」，專門幫這個台灣家庭規劃 2026 年四天三夜曼谷旅遊。
+行程摘要：
+- 4/30 台灣→曼谷，09:25 TPE 出發，12:10 BKK 落地，航空公司：華航 CI
+- 住宿：易思廷大酒店沙吞 Eastin Grand Hotel Sathorn（全程 4/30-5/3）
+- 5/1 Klook 水上市場＋美功鐵路一日遊 07:30-16:00
+- 5/2 自由行，可去洽圖洽、喬德夜市、Siam、Chit Lom、King Power Mahanakhon、鄭王廟
+- 5/3 07:50 到機場，10:50 BKK 飛回 TPE，15:30 到桃園
+請用繁體中文，語氣像親切的朋友，200字以內，適合手機閱讀。`,
+        messages:hist,
+      })
+    });
+    const data=await res.json();
+    const reply=data.content?.[0]?.text||'抱歉，請稍後再試！';
+    hideTyping();
+    const bubble=addMsg('','bot');
+    if(bubble){bubble.textContent=reply;}
+    hist.push({role:'assistant',content:reply});
+    if(hist.length>20)hist.splice(0,2);
+  }catch{
+    hideTyping();
+    const bubble=addMsg('','bot');
+    if(bubble)bubble.textContent='連線失敗，請確認網路。';
+  }
+}
+</script>
+</body>
+</html>
